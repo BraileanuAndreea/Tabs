@@ -1,0 +1,137 @@
+<!--
+Event si lucru cu DOM
+dinamic. buton de + care adauga un buton
+adaugam un handler de click ca sa activam si 
+sau eventdelegation
+
+sistem de taburi dinamic
+pe + apare un tab nou
+continut generat de utilizator. inseram in markup
+
+
+float left si pe ul clear float
+
+
+
+REMOVE TAG
+CLICK BODY
+-->
+
+
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<link rel="stylesheet" type="text/css" href="C_11.css">
+		<link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+		<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+	</head>
+	<body>
+		<div class= "container">
+			<ul>
+				<li class = "tab activ" data-number="1" >One</li>
+				<li class= "tab" data-number="2">Two</li>
+				<li class= "tab" data-number="3">Three</li>
+			</ul>
+			<div class = "contentList">
+				<div class= "div-hidden content-activ">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+				<div class= "div-hidden ">Autem eius soluta inventore aspernatur, id cumque harum iur eius soluta inventore aspernatur.</div>
+				<div class= "div-hidden">Sunt fuga vero fugiat! Odio sapiente, iusto reiciendis, explicabo unt fuga vero fugiat! Odio sapiente, iusto reiciendis, explicabo !</div>
+			</div>
+			<div class="button-holder">
+				<!-- <h2>Add Tab</h2> -->
+				<button class="btn-plus"></button>
+				<div class="hidden" id="dialog">
+				  <form onSubmit='return false' class="hidden" id="id-form" accept-charset="UTF-8">
+				    <!-- <fieldset class="form"> -->
+				      <label for="tab_title" class="hidden" id="id-label1">Title</label>
+				      <input type="text" name="tab_title" id="tab-title" placeholder=" Tab Title" class="hidden">
+				      <label for="tab-content" class="hidden" id="id-label2">Content</label>
+				      <textarea name="tab-content" id="tab-content" placeholder=" Content" class="hidden"></textarea>
+				      <button class="hidden" id="btn-done">Done</button>
+				    <!-- </fieldset> -->
+				  </form>
+				</div>
+			</div>
+		</div>
+		<script>
+				var numberTabs = 3;
+				var selectedTab = function(event){
+								//Afisare tab selectat
+								event.preventDefault();
+								console.log('functia care se executa laa ckick pe tab')
+								$('.tab').removeClass("activ");
+								$(this).addClass("activ");
+								var tabIndex = $(this).data("number");
+								$(".div-hidden").removeClass("content-activ");
+								$($(".div-hidden")[tabIndex-1]).addClass("content-activ");
+							}
+				$('.tab').on('click',selectedTab);
+				$('.btn-plus').on('click',function(event){
+					//Afisare formular
+						event.preventDefault();
+						$('#dialog,#id-form,#tab-title,#tab-content,#id-label1,#id-label2,#btn-done').removeClass('hidden');
+						$('#dialog').addClass('div-form');
+						$('#id-form').addClass('form');
+						$('#tab-title').addClass('insert-text');
+						$('#tab-content').addClass('insert-text');
+						$('#id-label1').addClass('label');
+						$('#id-label2').addClass('label');
+						$('#btn-done').addClass('btn-done');
+						
+						$('.btn-done').unbind('click');
+						$('.btn-done').on('click',function(event){
+							numberTabs++;
+							
+							//Memorare titlu 
+							var title = $('#tab-title').val();
+
+							//Creare li si atasare titlu
+							var newLiAppended = $("<li>" + title + "</li>");
+							$("ul").append(newLiAppended);
+							newLiAppended.addClass("new tab");
+
+							//Atasare id li-ului creat pentru a retine pozitia
+							newLiAppended.data("number",numberTabs);
+							// console.log($($("li")[numberTabs-1]).data());
+
+							//Memorare continut 
+							var content = $('#tab-content').val();
+
+							//Creare div si atasare continut
+							var newDivAppended = $("<div>"+ content +"<div>");
+							$(".contentList").append(newDivAppended);
+							newDivAppended.addClass("div-hidden");
+
+							//Ajustare lungime tab
+							// debugger
+							// var textLength = document.getElementById("tab-title").value.length;
+							// newLiAppended.css("width",textLength);
+							// console.log(textLength,newLiAppended.css("width"));
+
+							//Golire
+							$('#tab-title').val("");
+							$('#tab-content').val("");
+
+							//Ascundere formular
+							$('#dialog').removeClass('div-form');
+							$('#id-form').removeClass('form');
+							$('#tab-title').removeClass('insert-text');
+							$('#tab-content').removeClass('insert-text');
+							$('#id-label1').removeClass('label');
+							$('#id-label2').removeClass('label');
+							$('#btn-done').removeClass('btn-done');
+							$('#dialog,#id-form,#tab-title,#tab-content,#id-label1,#id-label2,#btn-done').addClass('hidden');
+							$('.tab').on('click', selectedTab);
+						});
+			
+			
+
+						
+
+				});
+			</script>
+		</div>
+	</body>
+</html>
